@@ -68,14 +68,10 @@ export function renderDashboard(container) {
       `).join('')}
     </main>
     
-    <footer style="text-align: center; padding: 4rem 0; color: var(--text-secondary);">
-      <p>&copy; ${new Date().getFullYear()} KPS Business. All rights reserved.</p>
-      <button id="relock-btn" style="background:none; border:none; color: #333; cursor:pointer; margin-top:1rem; font-size:0.8rem;">🔒 Relock (Dev)</button>
-    </footer>
+     <footer style="text-align: center; padding: 4rem 0; color: var(--text-secondary);">
+       <p>&copy; ${new Date().getFullYear()} KPS Business. All rights reserved.</p>
+     </footer>
   `;
 
-  document.getElementById('relock-btn').addEventListener('click', () => {
-    localStorage.removeItem('kps_unlocked');
-    location.reload();
-  });
+
 }

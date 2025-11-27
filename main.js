@@ -4,14 +4,26 @@ import { renderGate } from './gate.js'
 
 const app = document.querySelector('#app');
 
-function init() {
-  const isUnlocked = localStorage.getItem('kps_unlocked') === 'true';
+async function checkAccess() {
+  try {
+    const response = await fetch('/api/check-access', {
+      credentials: 'include'
+    });
+    const data = await response.json();
+    return data.hasAccess;
+  } catch (error) {
+    console.error('Error checking access:', error);
+    return false;
+  }
+}
 
-  if (isUnlocked) {
+async function init() {
+  const hasAccess = await checkAccess();
+
+  if (hasAccess) {
     renderDashboard(app);
   } else {
     renderGate(app, () => {
-      localStorage.setItem('kps_unlocked', 'true');
       renderDashboard(app);
     });
   }

@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  kps-app:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ./server/.env
+    restart: unless-stopped
