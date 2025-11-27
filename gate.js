@@ -7,7 +7,7 @@ export function renderGate(container, onUnlock) {
         <p class="gate-subtitle">Get instant access to the complete KPS Business -N- The Box blueprint suite.</p>
 
         <div class="price-tag">
-          <span class="currency">$</span>5<span class="period">/lifetime</span>
+          <span class="currency">$</span><span id="price-amount">5</span><span class="period">/lifetime</span>
         </div>
 
         <ul class="features-list">
@@ -27,6 +27,9 @@ export function renderGate(container, onUnlock) {
     fetch('/api/config')
       .then(response => response.json())
       .then(config => {
+        // Update price display
+        document.getElementById('price-amount').textContent = config.amount;
+
         if (!window.paypal) {
             const script = document.createElement('script');
             script.src = `https://www.paypal.com/sdk/js?client-id=${config.paypalClientId}&currency=${config.currency}`;
