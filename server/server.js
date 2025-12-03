@@ -54,10 +54,10 @@ app.post('/api/create-order', async (req, res) => {
     request.requestBody({
       intent: 'CAPTURE',
       purchase_units: [{
-        amount: {
-          currency_code: process.env.CURRENCY || 'USD',
-          value: process.env.PAYMENT_AMOUNT || '3995.99'
-        }
+         amount: {
+           currency_code: process.env.CURRENCY || 'USD',
+           value: process.env.PAYMENT_AMOUNT || '998.95'
+         }
       }]
     });
 
@@ -97,7 +97,7 @@ app.get('/api/config', (req, res) => {
   res.json({
     paypalClientId: process.env.PAYPAL_CLIENT_ID,
     currency: process.env.CURRENCY || 'USD',
-    amount: process.env.PAYMENT_AMOUNT || '3995.99'
+    amount: process.env.PAYMENT_AMOUNT || '998.95'
   });
 });
 

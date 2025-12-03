@@ -1,5 +1,5 @@
 export function renderGate(container, onUnlock) {
-    container.innerHTML = `
+  container.innerHTML = `
     <div class="gate-container">
       <div class="gate-card">
         <div class="lock-icon">🔒</div>
@@ -7,7 +7,7 @@ export function renderGate(container, onUnlock) {
         <p class="gate-subtitle">Get instant access to the complete KPS Business -N- The Box blueprint suite.</p>
 
         <div class="price-tag">
-          <span class="currency">$</span><span id="price-amount">5</span><span class="period">/lifetime</span>
+          <span class="currency">$</span><span id="price-amount">998.95</span><span class="period">/lifetime</span>
         </div>
 
         <ul class="features-list">
@@ -23,55 +23,55 @@ export function renderGate(container, onUnlock) {
     </div>
   `;
 
-    // Fetch config and load PayPal SDK
-    fetch('/api/config')
-      .then(response => response.json())
-      .then(config => {
-        // Update price display
-        document.getElementById('price-amount').textContent = config.amount;
+  // Fetch config and load PayPal SDK
+  fetch('/api/config')
+    .then(response => response.json())
+    .then(config => {
+      // Update price display
+      document.getElementById('price-amount').textContent = config.amount;
 
-        if (!window.paypal) {
-            const script = document.createElement('script');
-            script.src = `https://www.paypal.com/sdk/js?client-id=${config.paypalClientId}&currency=${config.currency}`;
-            script.onload = () => initPayPalButton(config);
-            document.head.appendChild(script);
-        } else {
-            initPayPalButton(config);
+      if (!window.paypal) {
+        const script = document.createElement('script');
+        script.src = `https://www.paypal.com/sdk/js?client-id=${config.paypalClientId}&currency=${config.currency}`;
+        script.onload = () => initPayPalButton(config);
+        document.head.appendChild(script);
+      } else {
+        initPayPalButton(config);
+      }
+    })
+    .catch(error => console.error('Error loading config:', error));
+
+  function initPayPalButton(config) {
+    try {
+      paypal.Buttons({
+        createOrder: async () => {
+          const response = await fetch('/api/create-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+          });
+          const order = await response.json();
+          return order.id;
+        },
+        onApprove: async (data) => {
+          const response = await fetch('/api/capture-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderID: data.orderID }),
+            credentials: 'include'
+          });
+          const result = await response.json();
+
+          if (result.status === 'COMPLETED') {
+            onUnlock();
+          } else {
+            alert('Payment failed. Please try again.');
+          }
         }
-      })
-      .catch(error => console.error('Error loading config:', error));
-
-    function initPayPalButton(config) {
-        try {
-            paypal.Buttons({
-                createOrder: async () => {
-                    const response = await fetch('/api/create-order', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        credentials: 'include'
-                    });
-                    const order = await response.json();
-                    return order.id;
-                },
-                onApprove: async (data) => {
-                    const response = await fetch('/api/capture-order', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ orderID: data.orderID }),
-                        credentials: 'include'
-                    });
-                    const result = await response.json();
-
-                    if (result.status === 'COMPLETED') {
-                        onUnlock();
-                    } else {
-                        alert('Payment failed. Please try again.');
-                    }
-                }
-            }).render('#paypal-button-container');
-        } catch (error) {
-            console.error('PayPal button initialization failed:', error);
-            document.getElementById('paypal-button-container').innerHTML = '<p style="color: red;">PayPal integration is not properly configured. Please contact support.</p>';
-        }
+      }).render('#paypal-button-container');
+    } catch (error) {
+      console.error('PayPal button initialization failed:', error);
+      document.getElementById('paypal-button-container').innerHTML = '<p style="color: red;">PayPal integration is not properly configured. Please contact support.</p>';
     }
+  }
 }
