@@ -15,7 +15,11 @@ function environment() {
   let clientId = process.env.PAYPAL_CLIENT_ID;
   let clientSecret = process.env.PAYPAL_CLIENT_SECRET;
 
-  return new paypal.core.LiveEnvironment(clientId, clientSecret);
+  if (process.env.PAYPAL_MODE === 'sandbox') {
+    return new paypal.core.SandboxEnvironment(clientId, clientSecret);
+  } else {
+    return new paypal.core.LiveEnvironment(clientId, clientSecret);
+  }
 }
 
 function client() {

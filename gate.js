@@ -42,31 +42,36 @@ export function renderGate(container, onUnlock) {
       .catch(error => console.error('Error loading config:', error));
 
     function initPayPalButton(config) {
-        paypal.Buttons({
-            createOrder: async () => {
-                const response = await fetch('/api/create-order', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include'
-                });
-                const order = await response.json();
-                return order.id;
-            },
-            onApprove: async (data) => {
-                const response = await fetch('/api/capture-order', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ orderID: data.orderID }),
-                    credentials: 'include'
-                });
-                const result = await response.json();
+        try {
+            paypal.Buttons({
+                createOrder: async () => {
+                    const response = await fetch('/api/create-order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include'
+                    });
+                    const order = await response.json();
+                    return order.id;
+                },
+                onApprove: async (data) => {
+                    const response = await fetch('/api/capture-order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ orderID: data.orderID }),
+                        credentials: 'include'
+                    });
+                    const result = await response.json();
 
-                if (result.status === 'COMPLETED') {
-                    onUnlock();
-                } else {
-                    alert('Payment failed. Please try again.');
+                    if (result.status === 'COMPLETED') {
+                        onUnlock();
+                    } else {
+                        alert('Payment failed. Please try again.');
+                    }
                 }
-            }
-        }).render('#paypal-button-container');
+            }).render('#paypal-button-container');
+        } catch (error) {
+            console.error('PayPal button initialization failed:', error);
+            document.getElementById('paypal-button-container').innerHTML = '<p style="color: red;">PayPal integration is not properly configured. Please contact support.</p>';
+        }
     }
 }
