@@ -59,7 +59,7 @@ app.post('/api/create-order', async (req, res) => {
       purchase_units: [{
         amount: {
           currency_code: process.env.CURRENCY || 'USD',
-          value: process.env.PAYMENT_AMOUNT || '449.95'
+          value: process.env.PAYMENT_AMOUNT || '20.00'
         }
       }]
     });
@@ -153,7 +153,7 @@ app.get('/api/config', (req, res) => {
   res.json({
     paypalClientId: process.env.PAYPAL_CLIENT_ID,
     currency: process.env.CURRENCY || 'USD',
-    amount: process.env.PAYMENT_AMOUNT || '449.95'
+    amount: process.env.PAYMENT_AMOUNT || '20.00'
   });
 });
 
@@ -185,7 +185,7 @@ function validateConfig() {
   console.log(`PayPal Mode: ${process.env.PAYPAL_MODE || 'sandbox'}`);
   console.log(`Client ID: ${process.env.PAYPAL_CLIENT_ID ? '✓ Configured' : '✗ Missing'}`);
   console.log(`Client Secret: ${process.env.PAYPAL_CLIENT_SECRET ? '✓ Configured' : '✗ Missing'}`);
-  console.log(`Payment Amount: $${process.env.PAYMENT_AMOUNT || '449.95'} ${process.env.CURRENCY || 'USD'}`);
+  console.log(`Payment Amount: $${process.env.PAYMENT_AMOUNT || '20.00'} ${process.env.CURRENCY || 'USD'}`);
   console.log('===================================\n');
 
   if (errors.length > 0) {
