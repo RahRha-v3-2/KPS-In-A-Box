@@ -59,7 +59,7 @@ app.post('/api/create-order', async (req, res) => {
       purchase_units: [{
         amount: {
           currency_code: process.env.CURRENCY || 'USD',
-          value: process.env.PAYMENT_AMOUNT || '20.00'
+          value: process.env.PAYMENT_AMOUNT || '249.98'
         }
       }]
     });
@@ -153,7 +153,7 @@ app.get('/api/config', (req, res) => {
   res.json({
     paypalClientId: process.env.PAYPAL_CLIENT_ID,
     currency: process.env.CURRENCY || 'USD',
-    amount: process.env.PAYMENT_AMOUNT || '20.00'
+    amount: process.env.PAYMENT_AMOUNT || '249.98'
   });
 });
 

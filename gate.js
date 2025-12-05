@@ -7,7 +7,7 @@ export function renderGate(container, onUnlock) {
         <p class="gate-subtitle">Get instant access to the complete KPS Business -N- The Box blueprint suite.</p>
 
         <div class="price-tag">
-          <span class="currency">$</span><span id="price-amount">20.00</span><span class="period">/lifetime</span>
+          <span class="currency">$</span><span id="price-amount">249.98</span><span class="period">/lifetime</span>
         </div>
 
         <ul class="features-list">
